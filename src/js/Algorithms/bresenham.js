@@ -1,42 +1,45 @@
-export const bresenham = (p, x1, y1, x2, y2) => {
+export const bresenham = (p, x0, y0, x1, y1) => {
   const { abs } = Math;
 
-  let diferenciaX = abs(x2 - x1);
-  let diferenciaY = abs(y2 - y1);
+  let deltaX = abs(x1 - x0);
+  let deltaY = abs(y1 - y0);
+  const signoX = x1 >= x0 ? 1 : -1;
+  const signoY = y1 >= y0 ? 1 : -1;
 
-  let esPendienteMayor = diferenciaY > diferenciaX;
+  const esPendienteMayor = deltaY > deltaX;
+
   if (esPendienteMayor) {
+    [x0, y0] = [y0, x0];
     [x1, y1] = [y1, x1];
-    [x2, y2] = [y2, x2];
-    [diferenciaX, diferenciaY] = [diferenciaY, diferenciaX];
+    [deltaX, deltaY] = [deltaY, deltaX];
   }
 
-  let incrementoX = x2 > x1 ? 1 : -1;
-  let incrementoY = y2 > y1 ? 1 : -1;
+  let error = deltaX / 2;
 
-  let error = diferenciaX / 2;
+  let x = x0;
+  let y = y0;
 
-  for (let i = 0; i <= diferenciaX; i++) {
+  for (let i = 0; i <= deltaX; i++) {
     if (esPendienteMayor) {
-      p.point(y1, x1);
+      p.point(x, y);
     } else {
-      p.point(x1, y1);
+      p.point(x, y);
     }
 
-    error += diferenciaY;
-    if (error >= diferenciaX) {
+    error += deltaY;
+    if (error >= deltaX) {
       if (esPendienteMayor) {
-        y1 += incrementoY;
+        x += signoX;
       } else {
-        x1 += incrementoX;
+        y += signoY; 
       }
-      error -= diferenciaX;
+      error -= deltaX;
     }
 
     if (esPendienteMayor) {
-      x1 += incrementoX;
+      y += signoY;
     } else {
-      y1 += incrementoY;
+      x += signoX;
     }
   }
 };

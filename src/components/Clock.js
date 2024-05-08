@@ -42,53 +42,51 @@ class Clock extends LitElement {
       const r = this._WIDTH / 2 - 50;
 
       p.setup = () => {
-        p.frameRate(1);
+        // p.frameRate(1);
         p.createCanvas(this._WIDTH, this._HEIGHT);
+        p.angleMode(p.DEGREES); // Usar grados para los ángulos
         p.stroke("white");
       };
 
       p.draw = () => {
+        p.translate(xc, yc); // Centrar el lienzo
+        p.rotate(-90); // Ajustar el ángulo para comenzar desde las 12
+
         p.strokeWeight(1);
         p.stroke("white");
         p.background("#121212");
-        this.drawCircle(xc, yc, r, p);
+        this.drawCircle(0, 0, r, p);
+
 
         // Se obtiene el tiempo
         let currentTime = this.time;
         if (!currentTime) {
           currentTime = new Date();
         }
-        // currentTime = {
-        //   second: currentTime.getSeconds(),
-        //   minute: currentTime.getMinutes(),
-        //   hour: currentTime.getHours() % 12,
-        // };
+
         // Calculando angulo
         const secondAngle = (currentTime.getSeconds() / 60) * 360;
         const minuteAngle = (currentTime.getMinutes() / 60) * 360;
         const hourAngle = ((currentTime.getHours() % 12) / 12) * 360;
         // Se calcula los puntos finales
-        const secondEnd = this.calculateEndpoint(xc, yc, 90, secondAngle);
-        const minuteEnd = this.calculateEndpoint(xc, yc, 70, minuteAngle);
-        const hourEnd = this.calculateEndpoint(xc, yc, 50, hourAngle);
+        const secondEnd = this.calculateEndpoint(0, 0, 90, secondAngle);
+        const minuteEnd = this.calculateEndpoint(0, 0, 70, minuteAngle);
+        const hourEnd = this.calculateEndpoint(0, 0, 50, hourAngle);
 
         if (this.type) {
           p.stroke("red");
-          algorithms[this.type](p, xc, yc, secondEnd.x, secondEnd.y);
+          algorithms[this.type](p, 0, 0, secondEnd.x, secondEnd.y);
 
           p.stroke("blue");
           p.strokeWeight(2);
-          algorithms[this.type](p, xc, yc, minuteEnd.x, minuteEnd.y);
+          algorithms[this.type](p, 0, 0, minuteEnd.x, minuteEnd.y);
 
           p.stroke("gray");
           p.strokeWeight(3);
-          algorithms[this.type](p, xc, yc, hourEnd.x, hourEnd.y);
+          algorithms[this.type](p, 0, 0, hourEnd.x, hourEnd.y);
         }
 
-        // console.log(this.time);
         currentTime.setSeconds(currentTime.getSeconds() + 1);
-        if(this.type === 'bresenham')
-        console.log(currentTime);
       };
     };
 
@@ -122,8 +120,8 @@ class Clock extends LitElement {
 
   calculateEndpoint(xc, yc, length, angle) {
     const radians = angle * (Math.PI / 180);
-    const x = xc + length * Math.cos(radians - Math.PI / 2);
-    const y = yc + length * Math.sin(radians - Math.PI / 2);
+    const x = Math.round(xc + length * Math.cos(radians ));
+    const y = Math.round(yc + length * Math.sin(radians ));
     return { x, y };
   }
 
@@ -132,7 +130,7 @@ class Clock extends LitElement {
   }
 
   updated(props) {
-    console.log(props);
+    // console.log(props);
   }
 }
 
