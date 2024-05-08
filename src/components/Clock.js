@@ -42,7 +42,7 @@ class Clock extends LitElement {
       const r = this._WIDTH / 2 - 50;
 
       p.setup = () => {
-        // p.frameRate(1);
+        p.frameRate(1);
         p.createCanvas(this._WIDTH, this._HEIGHT);
         p.angleMode(p.DEGREES); // Usar grados para los ángulos
         p.stroke("white");
